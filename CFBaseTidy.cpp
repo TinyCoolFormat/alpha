@@ -62,12 +62,12 @@ void CCFBaseTidy::SetTidyOption(const char* pOption, int nPos, int nSize)
 		return;
 	}
 
-	#define STR_SHORT_TEXT_FALG "#"
 
 	string strParam;
 	string strNumValue;
 	string strBstrValue;
 
+#define STR_SHORT_TEXT_FALG "#"
 	string strTextParam(pOption + nPos + 1, nSize - 1);
 	string::size_type nPosFlag = strTextParam.find(STR_SHORT_TEXT_FALG);
 	if (nPosFlag != string::npos)
