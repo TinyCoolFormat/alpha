@@ -7,6 +7,19 @@
 #include "CFCppTidy.h"
 using namespace std;
 
+void PrintVersionInfo()
+{
+	//cout<<"\t-------------------------------------------------------------"<<endl;
+	cout<<"TinyFormat  0.01 (2016 04 13 21:00:00)"<<endl;
+	cout<<"Create by  DennisMi"<<endl;
+	cout<<"E-mail  2475027682@qq.com "<<endl<<endl;
+	cout<<"I want to make this program a tiny tool to format your code."<<endl;
+	cout<<"The current Code Type is C and C++,and I will add other type "<<endl;
+	cout<<"such as Java,XML and so on.The base Code is from a format Tool"<<endl;
+	cout<<"called CoolFormat.Thanks to the author .				 "<<endl;
+	//cout<<"\t-------------------------------------------------------------"<<endl;
+}
+
 
 bool  ReadStringFromFile(const char * chFileName,std::string & strFileText)
 {
@@ -14,7 +27,7 @@ bool  ReadStringFromFile(const char * chFileName,std::string & strFileText)
 	if(NULL != pFile)
 	{
 		char chBuf[1024]={0};
-		while(fread(chBuf,sizeof(char),1024,pFile) > 0)
+		while(fread(chBuf,sizeof(char),1023,pFile) > 0)
 		{
 			strFileText += std::string(chBuf);
 			memset(chBuf,0,1024);
@@ -44,6 +57,7 @@ bool WriteStringToFile(const std::string strFileText,const char * chFileName)
 
 int main(int argc,char* argv[])
 {
+	PrintVersionInfo();
 	if(argc < 2)
 	{
 		cout<<"Please input the file you want to format after the command "<<endl;
@@ -67,12 +81,6 @@ int main(int argc,char* argv[])
 			std::string strOpt=" --mode=c ";
 			std::string strError="";
 			util.TidyMain(strSrc.c_str(),strOpt.c_str(),strOut,strError);
-			cout<<"TinyCoolFormatter  "<<endl;
-			cout<<"Before "<<endl;
-//			cout<<strSrc.c_str()<<endl;
-			cout<<endl<<"After"<<endl;
-//	cout<<strOut.c_str()<<endl;
-			cout<<endl;
 			WriteStringToFile(strOut,dstFile.c_str());
 		}
 	}
