@@ -1,15 +1,60 @@
 #include <iostream>
 #include <string>
-#include <stdio.h>
+
+#include <unistd.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <vector>
+
+#include <stdlib.h>
 #include "astyle.h"
 #include "astyle_main.h"
 #include "CFBaseTidy.h"
 #include "CFCppTidy.h"
+
 using namespace std;
+
+bool WalkDir(const char * dir,std::vector<std::string> & fileVec)
+{
+
+	cout<<"Dir "<<dir<<endl;
+
+    DIR *dp;
+    struct dirent *entry;
+    struct stat statbuf;
+    if((dp = opendir(dir)) == NULL)
+    {
+        fprintf(stderr,"cannot open directory: %s\n", dir);
+        return false;
+    }
+    chdir(dir);
+    while((entry = readdir(dp)) != NULL) {
+        lstat(entry->d_name,&statbuf);
+        if(S_ISDIR(statbuf.st_mode)) {
+
+            if(strcmp(".",entry->d_name) == 0 ||
+               strcmp("..",entry->d_name) == 0)
+             {
+				 continue;
+			 }
+			 std::string strFile = std::string(dir)+"/"+std::string(entry->d_name);
+			 WalkDir(strFile.c_str(),fileVec);
+        }
+		else
+		{
+
+			 std::string strFile = std::string(dir)+"/"+std::string(entry->d_name);
+			 fileVec.push_back(strFile);
+		}
+	}
+	chdir("..");
+	closedir(dp);
+	return true;
+}
+
 
 void PrintVersionInfo()
 {
-	//cout<<"\t-------------------------------------------------------------"<<endl;
 	cout<<"TinyFormat  0.01 (2016 04 13 21:00:00)"<<endl;
 	cout<<"Create by  DennisMi"<<endl;
 	cout<<"E-mail  2475027682@qq.com "<<endl<<endl;
@@ -17,7 +62,6 @@ void PrintVersionInfo()
 	cout<<"The current Code Type is C and C++,and I will add other type "<<endl;
 	cout<<"such as Java,XML and so on.The base Code is from a format Tool"<<endl;
 	cout<<"called CoolFormat.Thanks to the author .				 "<<endl;
-	//cout<<"\t-------------------------------------------------------------"<<endl;
 }
 
 
@@ -54,35 +98,120 @@ bool WriteStringToFile(const std::string strFileText,const char * chFileName)
 	return false;
 }
 
-
-int main(int argc,char* argv[])
+void PrintHelpInfo()
 {
-	PrintVersionInfo();
-	if(argc < 2)
+	cout<<"\t	-i	Input File or Input Folder 	"<<endl;
+	cout<<"\t	-o 	Output File or Output Folder "<<endl;
+	cout<<"\t	-h	show this Info	"<<endl;
+	cout<<"\t	-v	show version info	"<<endl;
+}
+
+
+class CInputOutputConfig 
+{
+public:
+	std::string m_strInput;
+	std::string m_strOutput;
+};
+
+bool ParseInput(int argc,char * argv[],CInputOutputConfig & config)
+{
+	int opt = 0;
+	while((opt = getopt(argc,argv,"i:o:h:v")) != -1)
 	{
-		cout<<"Please input the file you want to format after the command "<<endl;
-		cout<<"Eg: TinyFormat Main.cpp"<<endl;
-		return 0;
+		switch(opt)
+		{
+		case 'i':
+			{
+				config.m_strInput = std::string(optarg);
+				cout<<"Input File Or Folder "<<optarg<<endl;
+			}break;
+		case 'o':
+			{
+				config.m_strOutput = std::string(optarg);
+				cout<<"Output File "<<optarg<<endl;
+			}break;
+		case 'h':
+			{
+				PrintHelpInfo();
+			}break;
+		case 'v':
+			{
+				PrintVersionInfo();
+			}break;
+		case '?':
+			{
+				return false;
+			}break;
+		}
+	}
+	return true;
+}
+
+bool IsPathAFolder(const char * pChPath)
+{
+
+	struct stat fileStatus;
+	int nResult = stat(pChPath,&fileStatus);
+	if(nResult == 0 && S_ISDIR(fileStatus.st_mode))
+	{
+		return true;
 	}
 	else
 	{
-		std::string srcFile(argv[1]);
-		std::string dstFile;
-		if(argc == 3)
-		{
-			dstFile = std::string(argv[2]);
-		}
+		return false;
+	}
+}
+
+bool FormatCode(const char * srcFile,const char * dstFile,int codeType = 0)
+{
+
+	
 		CCFCppTidy util;	
 		std::string strSrc="";
-		if(ReadStringFromFile(srcFile.c_str(),strSrc))
+		if(ReadStringFromFile(srcFile,strSrc))
 		{
 	
 			std::string strOut="";
 			std::string strOpt=" --mode=c ";
 			std::string strError="";
 			util.TidyMain(strSrc.c_str(),strOpt.c_str(),strOut,strError);
-			WriteStringToFile(strOut,dstFile.c_str());
+			WriteStringToFile(strOut,dstFile);
 		}
+	
+	return true;
+}
+
+int main(int argc,char* argv[])
+{
+	CInputOutputConfig config;
+	if(ParseInput(argc,argv,config))
+	{
+		cout<<"Input " <<config.m_strInput<<endl;
+		cout<<"Output "<<config.m_strOutput<<endl;
+		bool bInputFolder = IsPathAFolder(config.m_strInput.c_str()) ;
+		bool bOutputFolder =  IsPathAFolder(config.m_strOutput.c_str());
+		if(bInputFolder && bOutputFolder)
+		{
+			std::vector<std::string> srcFileVec;
+			WalkDir(config.m_strInput.c_str(),srcFileVec);
+			for(int i = 0 ; i < srcFileVec.size() ;i++)
+			{
+				std::string srcFile=srcFileVec[i];
+				std::string dstFile = srcFile+"Result.cpp";
+				FormatCode(srcFile.c_str(),dstFile.c_str());
+			}
+		}
+		else if( !bInputFolder && !bOutputFolder)
+		{
+			FormatCode(config.m_strInput.c_str(),config.m_strOutput.c_str());
+		}
+	    return 0;	
 	}
-	return 0;
+	else
+	{
+		cout<<"Param error "<<endl;
+		return 0;
+	}
+
 }
