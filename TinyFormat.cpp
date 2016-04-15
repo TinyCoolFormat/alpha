@@ -14,11 +14,16 @@
 
 using namespace std;
 
+std::string GetFileExtern(const char * pFileName)
+{
+	std::string strFileName(pFileName);
+	size_t index = strFileName.rfind(".");
+    std::string strResult = strFileName.substr(index,strFileName.length()-index);
+	return strResult;
+}
+
 bool WalkDir(const char * dir,std::vector<std::string> & fileVec)
 {
-
-	cout<<"Dir "<<dir<<endl;
-
     DIR *dp;
     struct dirent *entry;
     struct stat statbuf;
@@ -28,9 +33,11 @@ bool WalkDir(const char * dir,std::vector<std::string> & fileVec)
         return false;
     }
     chdir(dir);
-    while((entry = readdir(dp)) != NULL) {
+    while((entry = readdir(dp)) != NULL) 
+	{
         lstat(entry->d_name,&statbuf);
-        if(S_ISDIR(statbuf.st_mode)) {
+        if(S_ISDIR(statbuf.st_mode)) 
+		{
 
             if(strcmp(".",entry->d_name) == 0 ||
                strcmp("..",entry->d_name) == 0)
@@ -165,19 +172,16 @@ bool IsPathAFolder(const char * pChPath)
 
 bool FormatCode(const char * srcFile,const char * dstFile,int codeType = 0)
 {
-
-	
-		CCFCppTidy util;	
-		std::string strSrc="";
-		if(ReadStringFromFile(srcFile,strSrc))
-		{
-	
-			std::string strOut="";
-			std::string strOpt=" --mode=c ";
-			std::string strError="";
-			util.TidyMain(strSrc.c_str(),strOpt.c_str(),strOut,strError);
-			WriteStringToFile(strOut,dstFile);
-		}
+	CFCppTidy util;
+	std::string strSrc="";
+	if(ReadStringFromFile(srcFile,strSrc))
+	{
+		std::string strOut="";
+		std::string strOpt=" --mode=c ";
+		std::string strError="";
+		util.TidyMain(strSrc.c_str(),strOpt.c_str(),strOut,strError);
+		WriteStringToFile(strOut,dstFile);
+	}
 	
 	return true;
 }
