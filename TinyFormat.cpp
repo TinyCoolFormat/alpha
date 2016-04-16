@@ -1,11 +1,9 @@
 #include <iostream>
 #include <string>
-
 #include <unistd.h>
 #include <dirent.h>
 #include <sys/stat.h>
 #include <vector>
-
 #include <stdlib.h>
 #include "astyle.h"
 #include "astyle_main.h"
@@ -18,7 +16,7 @@ std::string GetFileExtern(const char * pFileName)
 {
 	std::string strFileName(pFileName);
 	size_t index = strFileName.rfind(".");
-    std::string strResult = strFileName.substr(index,strFileName.length()-index);
+    std::string strResult = strFileName.substr(index+1,strFileName.length()-index);
 	return strResult;
 }
 
@@ -113,7 +111,27 @@ void PrintHelpInfo()
 	cout<<"\t	-v	show version info	"<<endl;
 }
 
+typedef enum code_type 
+{
+	UNKNOWN_TYPE,
+	CPP_TYPE,
+}CODE_TYPE;
 
+CODE_TYPE GetFileCodeType(const char * pChFileName)
+{
+	std::string strExtern = GetFileExtern(pChFileName);
+	if(strExtern.compare("cpp") == 0 ||
+	   strExtern.compare("c")	== 0 ||
+	   strExtern.compare("cxx") == 0 
+	  )
+	{
+		return CPP_TYPE;
+	}
+	else
+	{
+		return UNKNOWN_TYPE;
+	}
+}
 class CInputOutputConfig 
 {
 public:
@@ -172,7 +190,7 @@ bool IsPathAFolder(const char * pChPath)
 
 bool FormatCode(const char * srcFile,const char * dstFile,int codeType = 0)
 {
-	CFCppTidy util;
+	CCFCppTidy util;
 	std::string strSrc="";
 	if(ReadStringFromFile(srcFile,strSrc))
 	{
@@ -203,7 +221,11 @@ int main(int argc,char* argv[])
 			{
 				std::string srcFile=srcFileVec[i];
 				std::string dstFile = srcFile+"Result.cpp";
-				FormatCode(srcFile.c_str(),dstFile.c_str());
+				if(CPP_TYPE == GetFileCodeType(srcFile.c_str()) )
+				{
+					FormatCode(srcFile.c_str(),dstFile.c_str());
+					rename(dstFile.c_str(),srcFile.c_str());
+				}
 			}
 		}
 		else if( !bInputFolder && !bOutputFolder)

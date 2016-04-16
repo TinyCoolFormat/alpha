@@ -337,6 +337,7 @@ CInputOutputConfig	TinyFormat.cpp	/^class CInputOutputConfig $/;"	c	file:
 CInputOutputConfig::m_strInput	TinyFormat.cpp	/^	std::string m_strInput;$/;"	m	class:CInputOutputConfig	file:	access:public
 CInputOutputConfig::m_strOutput	TinyFormat.cpp	/^	std::string m_strOutput;$/;"	m	class:CInputOutputConfig	file:	access:public
 CLASS_TYPE	astyle.h	/^	CLASS_TYPE = 2,				\/\/ also a DEFINITION_TYPE$/;"	e	enum:astyle::BracketType
+CODE_TYPE	TinyFormat.cpp	/^}CODE_TYPE;$/;"	t	typeref:enum:code_type	file:
 COLON_PAD_AFTER	astyle.h	/^	COLON_PAD_AFTER,$/;"	e	enum:astyle::ObjCColonPad
 COLON_PAD_ALL	astyle.h	/^	COLON_PAD_ALL,$/;"	e	enum:astyle::ObjCColonPad
 COLON_PAD_BEFORE	astyle.h	/^	COLON_PAD_BEFORE$/;"	e	enum:astyle::ObjCColonPad
@@ -345,6 +346,8 @@ COLON_PAD_NO_CHANGE	astyle.h	/^	COLON_PAD_NO_CHANGE,$/;"	e	enum:astyle::ObjCColo
 COMMAND_TYPE	astyle.h	/^	COMMAND_TYPE = 32,$/;"	e	enum:astyle::BracketType
 CXX	makefile	/^CXX=g++$/;"	m
 CXXFLAGS	makefile	/^CXXFLAGS=-std=c++11$/;"	m
+CXX_TYPE	TinyFormat.cpp	/^	CXX_TYPE,$/;"	e	enum:code_type	file:
+C_TYPE	TinyFormat.cpp	/^	C_TYPE,$/;"	e	enum:code_type	file:
 C_TYPE	astyle.h	/^enum FileType { C_TYPE = 0, JAVA_TYPE = 1, SHARP_TYPE = 2 };$/;"	e	enum:astyle::FileType
 ChineseSimplified	ASLocalizer.cpp	/^ChineseSimplified::ChineseSimplified()	\/\/ 中文（简体）$/;"	f	class:astyle::ChineseSimplified	signature:()
 ChineseSimplified	ASLocalizer.h	/^		ChineseSimplified();$/;"	p	class:astyle::ChineseSimplified	access:public	signature:()
@@ -376,6 +379,7 @@ French	ASLocalizer.h	/^class French : public Translation$/;"	c	namespace:astyle	
 German	ASLocalizer.cpp	/^German::German()	\/\/ Deutsch$/;"	f	class:astyle::German	signature:()
 German	ASLocalizer.h	/^		German();$/;"	p	class:astyle::German	access:public	signature:()
 German	ASLocalizer.h	/^class German : public Translation$/;"	c	namespace:astyle	inherits:Translation
+GetFileExtern	TinyFormat.cpp	/^std::string GetFileExtern(const char * pFileName)$/;"	f	signature:(const char * pFileName)
 Hindi	ASLocalizer.cpp	/^Hindi::Hindi()	\/\/ हिन्दी$/;"	f	class:astyle::Hindi	signature:()
 Hindi	ASLocalizer.h	/^		Hindi();$/;"	p	class:astyle::Hindi	access:public	signature:()
 Hindi	ASLocalizer.h	/^class Hindi : public Translation$/;"	c	namespace:astyle	inherits:Translation
@@ -2239,6 +2243,7 @@ clearFormattedLineSplitPoints	ASFormatter.cpp	/^void ASFormatter::clearFormatted
 clearFormattedLineSplitPoints	astyle.h	/^		void clearFormattedLineSplitPoints();$/;"	p	class:astyle::ASFormatter	access:private	signature:()
 clearObjCMethodDefinitionAlignment	ASBeautifier.cpp	/^void ASBeautifier::clearObjCMethodDefinitionAlignment()$/;"	f	class:astyle::ASBeautifier	signature:()
 clearObjCMethodDefinitionAlignment	astyle.h	/^		void clearObjCMethodDefinitionAlignment();$/;"	p	class:astyle::ASBeautifier	access:private	signature:()
+code_type	TinyFormat.cpp	/^typedef enum code_type $/;"	g	file:
 colonIndentObjCMethodDefinition	astyle.h	/^		int  colonIndentObjCMethodDefinition;$/;"	m	class:astyle::ASBeautifier	access:private
 commentAndHeaderFollows	ASFormatter.cpp	/^bool ASFormatter::commentAndHeaderFollows()$/;"	f	class:astyle::ASFormatter	signature:()
 commentAndHeaderFollows	astyle.h	/^		bool commentAndHeaderFollows();$/;"	p	class:astyle::ASFormatter	access:private	signature:()
