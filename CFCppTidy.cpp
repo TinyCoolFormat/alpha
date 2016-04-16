@@ -29,19 +29,19 @@ bool CCFCppTidy::TidyMain(const char* pSourceIn, const char *pOptions, std::stri
 {
     s_strErr.clear();
 
-	char* textOut = AStyleMain(pSourceIn, pOptions,
-        ASErrorHandler,
-        ASMemoryAlloc);
+    char* textOut = AStyleMain(pSourceIn, pOptions,
+                               ASErrorHandler,
+                               ASMemoryAlloc);
 
-	strErr = s_strErr;
-	if (textOut == NULL)
-	{
-		return false;
-	}
+    strErr = s_strErr;
+    if (textOut == NULL)
+    {
+        return false;
+    }
 
-	strOut = textOut;
-	delete[] textOut;
-	return true;
+    strOut = textOut;
+    delete[] textOut;
+    return true;
 }
 
 void CCFCppTidy::InitTidyDefault()
