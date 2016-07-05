@@ -1,0 +1,2 @@
+#/bin/bash
+(export LD_SHARE_LIB=./lib/ && make)

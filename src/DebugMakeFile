@@ -12,5 +12,5 @@ all:
 	(export LD_LIBRARY_PATH=./lib/)
 	(cd AStyleMain;$(MAKE))
 	(cd CFCCPP;$(MAKE))
-	$(CXX) $(CXXFLAGS) -I./include/ TinyFormat.cpp  -L./lib -lCFCCPP -o TinyShared.exe
+	$(CXX) $(CXXFLAGS) -g -I./include/ TinyFormat.cpp  -L./lib -lCFCCPP -o TinyShared.exe
 	./TinyShared.exe

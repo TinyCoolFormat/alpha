@@ -19,6 +19,12 @@ class CStyleChoice
 	private:
 		vector<string> m_styleVec;
 	public:
+		CStyleChoice()
+		{
+			InitStyle();
+		}
+
+
 		void InitStyle()
 		{
 			m_styleVec.push_back("--style=allman");
@@ -48,6 +54,10 @@ class CTabChoice
 	private:
 		vector<string> m_tabVec;
 	public:
+		CTabChoice()
+		{
+			Init();
+		}
 		void Init()
 		{
 			m_tabVec.push_back("--indent=spaces=#");
@@ -71,6 +81,10 @@ class CBracketModifyChoice
 
 
 public:
+		CBracketModifyChoice()
+		{
+			Init();
+		}
 		void Init()
 		{
 			m_BracketVec.push_back("--attach-namespaces");
@@ -91,6 +105,10 @@ class CIndentChoice
 	private:
 		vector<string> m_IndentVec;
 	public:
+		CIndentChoice()
+		{
+			Init();
+		}
 		void Init()
 		{
 			m_IndentVec.push_back("--indent-classes");
@@ -119,6 +137,10 @@ class CPadChoice
 	private:
 		vector<string> m_PadVec;
 	public:
+		CPadChoice()
+		{
+			Init();
+		}
 		void Init()
 		{
 			m_PadVec.push_back("--break-blocks");
@@ -143,6 +165,10 @@ class CPadChoice
 
 		}
 
+		string GetCurOption()
+		{
+			return m_PadVec[0];
+		}
 };
 
 
@@ -151,6 +177,11 @@ class CFormatChoice
 	private:
 		vector<string> m_FormatVec;
 	public:
+
+		CFormatChoice()
+		{
+			Init();
+		}
 		void Init()
 		{
 			m_FormatVec.push_back("--break-closing-brackets");
@@ -168,8 +199,11 @@ class CFormatChoice
 
 			m_FormatVec.push_back("--max-code-length=#");
 			m_FormatVec.push_back("--break-after-logical");
+		}
 
-
+		string GetCurOption()
+		{
+			return m_FormatVec[0];
 		}
 };
 
@@ -179,6 +213,11 @@ class CModeChoice
 	private:
 		vector<string> m_modeVec;
 	public:
+
+		CModeChoice()
+		{
+			Init();
+		}
 		void Init()
 		{
 
@@ -186,6 +225,11 @@ class CModeChoice
 			m_modeVec.push_back("--mode=java");
 			m_modeVec.push_back("--mode=cs");
 
+		}
+
+		string GetCurOption()
+		{
+			return m_modeVec[0];
 		}
 };
 
@@ -373,12 +417,28 @@ bool IsPathAFolder(const char * pChPath)
 
 bool FormatCode(const char * srcFile,const char * dstFile,int codeType = 0)
 {
+	
+	CStyleChoice styleChoice;
+	CTabChoice tabChoice;
+	CBracketModifyChoice bracketChoice;
+	CIndentChoice indentChoice;
+	CPadChoice padChoice;
+	CFormatChoice formatChoice;
+
+
     CCFCppTidy util;
     std::string strSrc="";
     if(ReadStringFromFile(srcFile,strSrc))
     {
         std::string strOut="";
         std::string strOpt=" --mode=c ";
+
+		strOpt = strOpt + styleChoice.GetCurOption()+" ";
+		strOpt = strOpt + tabChoice.GetCurOption()+" ";
+		strOpt = strOpt +  bracketChoice.GetCurOption()+" ";
+		strOpt = strOpt + indentChoice.GetCurOption()+" ";
+		strOpt = strOpt + padChoice.GetCurOption()+" ";
+
         std::string strError="";
         util.TidyMain(strSrc.c_str(),strOpt.c_str(),strOut,strError);
         WriteStringToFile(strOut,dstFile);
@@ -422,5 +482,4 @@ int main(int argc,char* argv[])
         cout<<"Param error "<<endl;
         return 0;
     }
-
 }
