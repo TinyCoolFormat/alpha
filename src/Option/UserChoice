@@ -1,0 +1,8 @@
+<Config>
+    <CBracketModifyOption>--attach-classes</CBracketModifyOption>
+    <CPadOption>--break-blocks=all</CPadOption>
+    <CFormatOption>--break-elseifs</CFormatOption>
+    <CModeOption>--mode=java</CModeOption>
+    <CFormatOption>--break-elseifs</CFormatOption>
+    <CStyleOption>--style=java</CStyleOption>
+</Config>
